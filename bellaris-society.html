@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bellaris Society</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:    #0a0a0a;
+      --card:     #141414;
+      --card2:    #1c1c1c;
+      --gold:     #C4A35A;
+      --gold-lt:  #E8C47A;
+      --gold-dim: rgba(196,163,90,0.15);
+      --white:    #ffffff;
+      --muted:    rgba(255,255,255,0.60);
+      --serif:    'Playfair Display', Georgia, serif;
+      --body:     'Cormorant Garamond', Georgia, serif;
+    }
+
+    html, body { width: 100%; height: 100%; overflow: hidden; background: var(--black); }
+
+    /* ───── DECK ───── */
+    .deck {
+      width: 100%;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 80px;
+      background: var(--black);
+      opacity: 0;
+      transform: translateX(60px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      pointer-events: none;
+    }
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: all;
+    }
+    .slide.exit-left {
+      opacity: 0;
+      transform: translateX(-60px);
+    }
+
+    /* ───── NAVIGATION ───── */
+    .nav-dots {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 100;
+    }
+    .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .dot.active { background: var(--gold); transform: scale(1.4); }
+
+    .nav-arrow {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.4);
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      z-index: 100;
+      transition: border-color 0.3s, color 0.3s, background 0.3s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-arrow:hover { border-color: var(--gold); color: var(--gold); background: rgba(196,163,90,0.08); }
+    .nav-arrow.prev { left: 24px; }
+    .nav-arrow.next { right: 24px; }
+
+    .slide-counter {
+      position: fixed;
+      top: 28px;
+      right: 40px;
+      font-family: var(--body);
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      z-index: 100;
+    }
+
+    /* ───── BRAND MARK ───── */
+    .brand-mark {
+      position: fixed;
+      top: 24px;
+      left: 40px;
+      z-index: 100;
+    }
+    .brand-mark img {
+      height: 28px;
+      width: auto;
+      opacity: 0.55;
+    }
+
+    /* ───── TYPOGRAPHY UTILS ───── */
+    .label {
+      font-family: var(--body);
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    .display {
+      font-family: var(--serif);
+      font-size: clamp(52px, 8vw, 96px);
+      font-weight: 500;
+      line-height: 1.05;
+      color: var(--white);
+      text-align: center;
+    }
+
+    .display-gold {
+      font-family: var(--serif);
+      font-size: clamp(52px, 8vw, 96px);
+      font-weight: 500;
+      line-height: 1.05;
+      color: var(--gold);
+      text-align: center;
+    }
+
+    .headline {
+      font-family: var(--serif);
+      font-size: clamp(32px, 4.5vw, 56px);
+      font-weight: 500;
+      line-height: 1.15;
+      color: var(--white);
+    }
+
+    .headline-gold {
+      font-family: var(--serif);
+      font-size: clamp(28px, 3.5vw, 44px);
+      font-weight: 500;
+      line-height: 1.2;
+      color: var(--gold);
+    }
+
+    .body-lg {
+      font-family: var(--body);
+      font-size: clamp(18px, 2vw, 24px);
+      font-weight: 300;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.80);
+    }
+
+    .body {
+      font-family: var(--body);
+      font-size: clamp(15px, 1.6vw, 20px);
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .divider {
+      width: 48px;
+      height: 1px;
+      background: var(--gold);
+      margin: 24px auto;
+    }
+
+    .divider-left { margin: 20px 0; }
+
+    /* ───── CARDS ───── */
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(196,163,90,0.2);
+      border-radius: 4px;
+      padding: 32px 36px;
+    }
+
+    .card-highlight {
+      background: var(--gold-dim);
+      border: 1px solid rgba(196,163,90,0.4);
+      border-radius: 4px;
+      padding: 28px 36px;
+    }
+
+    /* ───── GRID / LAYOUT ───── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    .three-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    .content-block {
+      width: 100%;
+      max-width: 860px;
+      text-align: center;
+    }
+
+    .content-left {
+      width: 100%;
+      max-width: 900px;
+      text-align: left;
+    }
+
+    /* ───── BULLET LIST ───── */
+    .bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .bullet-list li {
+      font-family: var(--body);
+      font-size: clamp(16px, 1.7vw, 21px);
+      font-weight: 300;
+      color: rgba(255,255,255,0.80);
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      line-height: 1.5;
+    }
+    .bullet-list li::before {
+      content: '✦';
+      color: var(--gold);
+      font-size: 10px;
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+
+    /* ───── QUOTE ───── */
+    .quote-box {
+      border-left: 2px solid var(--gold);
+      padding: 20px 28px;
+      background: var(--gold-dim);
+      border-radius: 0 4px 4px 0;
+    }
+    .quote-text {
+      font-family: var(--serif);
+      font-size: clamp(18px, 2.2vw, 26px);
+      font-style: italic;
+      color: var(--white);
+      line-height: 1.5;
+    }
+
+    /* ───── TABLE ───── */
+    .premium-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--body);
+    }
+    .premium-table th {
+      background: var(--gold-dim);
+      color: var(--gold);
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 14px 20px;
+      text-align: left;
+      border-bottom: 1px solid rgba(196,163,90,0.3);
+    }
+    .premium-table td {
+      padding: 14px 20px;
+      font-size: clamp(14px, 1.5vw, 18px);
+      color: rgba(255,255,255,0.80);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-weight: 300;
+    }
+    .premium-table tr.highlight-row td {
+      color: var(--gold);
+      background: var(--gold-dim);
+      font-weight: 400;
+    }
+    .premium-table td.accent { color: var(--gold-lt); font-weight: 500; }
+
+    /* ───── COMPARISON ───── */
+    .comparison-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 0;
+      align-items: center;
+      width: 100%;
+      max-width: 920px;
+    }
+    .comparison-col {
+      padding: 28px 32px;
+    }
+    .comparison-col.left {
+      background: var(--card);
+      border-radius: 4px 0 0 4px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-right: none;
+    }
+    .comparison-col.right {
+      background: var(--gold-dim);
+      border: 1px solid rgba(196,163,90,0.35);
+      border-left: none;
+      border-radius: 0 4px 4px 0;
+    }
+    .comparison-divider {
+      width: 1px;
+      height: 100%;
+      background: var(--gold);
+      align-self: stretch;
+    }
+    .comp-label {
+      font-family: var(--body);
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .comp-item {
+      font-family: var(--body);
+      font-size: clamp(15px, 1.6vw, 19px);
+      font-weight: 300;
+      color: rgba(255,255,255,0.60);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+    .comp-item-gold {
+      font-family: var(--body);
+      font-size: clamp(15px, 1.6vw, 19px);
+      font-weight: 400;
+      color: var(--gold-lt);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    /* ───── FUNNEL ───── */
+    .funnel-step {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 20px 28px;
+      border-radius: 4px;
+      width: 100%;
+      max-width: 680px;
+    }
+    .funnel-step.dim { background: var(--card); border: 1px solid rgba(255,255,255,0.07); }
+    .funnel-step.active-step { background: var(--gold-dim); border: 1px solid rgba(196,163,90,0.4); }
+    .funnel-label {
+      font-family: var(--body);
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      width: 220px;
+      flex-shrink: 0;
+    }
+    .funnel-name {
+      font-family: var(--serif);
+      font-size: clamp(18px, 2vw, 24px);
+    }
+    .funnel-name.gold { color: var(--gold); font-weight: 600; }
+    .funnel-name.muted { color: rgba(255,255,255,0.45); }
+
+    /* ───── PRICE BLOCK ───── */
+    .price-display {
+      font-family: var(--serif);
+      font-size: clamp(64px, 10vw, 120px);
+      font-weight: 500;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .price-sub {
+      font-family: var(--body);
+      font-size: clamp(16px, 1.8vw, 22px);
+      color: var(--muted);
+      margin-top: 10px;
+      letter-spacing: 1px;
+    }
+    .price-badge {
+      display: inline-block;
+      background: var(--gold-dim);
+      border: 1px solid rgba(196,163,90,0.4);
+      border-radius: 2px;
+      padding: 8px 20px;
+      font-family: var(--body);
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-top: 24px;
+    }
+
+    /* ───── PHRASE LIST ───── */
+    .phrase-item {
+      font-family: var(--serif);
+      font-size: clamp(20px, 2.5vw, 30px);
+      font-style: italic;
+      color: rgba(255,255,255,0.80);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      padding: 18px 0;
+      text-align: center;
+    }
+    .phrase-item:last-child { border-bottom: none; }
+
+    /* ───── SLIDE-SPECIFIC ───── */
+
+    /* S1 — HERO */
+    #s1 { text-align: center; }
+    #s1 .hero-label {
+      font-family: var(--body);
+      font-size: 11px;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+    }
+    #s1 .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(60px, 11vw, 130px);
+      font-weight: 500;
+      letter-spacing: 10px;
+      text-transform: uppercase;
+      color: var(--white);
+      line-height: 1;
+    }
+    #s1 .hero-title span { color: var(--gold); }
+    #s1 .hero-sub {
+      font-family: var(--body);
+      font-size: clamp(16px, 1.8vw, 22px);
+      color: var(--muted);
+      margin-top: 24px;
+      letter-spacing: 3px;
+    }
+    #s1 .hero-tagline {
+      margin-top: 48px;
+      display: flex;
+      gap: 40px;
+      align-items: center;
+      justify-content: center;
+    }
+    #s1 .hero-tagline span {
+      font-family: var(--body);
+      font-size: clamp(13px, 1.4vw, 16px);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+    #s1 .hero-tagline .sep {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    /* background texture lines for hero */
+    #s1::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 80px,
+          rgba(196,163,90,0.03) 80px,
+          rgba(196,163,90,0.03) 81px
+        );
+      pointer-events: none;
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- Brand mark + counter -->
+<div class="brand-mark"><img src="02.1. LT Hor White - [VAZADO].svg" alt="Bellaris Clinic"></div>
+<div class="slide-counter" id="counter">01 / 12</div>
+
+<!-- Navigation arrows -->
+<button class="nav-arrow prev" onclick="navigate(-1)">&#8592;</button>
+<button class="nav-arrow next" onclick="navigate(1)">&#8594;</button>
+
+<!-- Dots -->
+<div class="nav-dots" id="dots"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     DECK
+════════════════════════════════════════════════════ -->
+<div class="deck">
+
+  <!-- ── S1: HERO ── -->
+  <div class="slide active" id="s1">
+    <img src="02.1. LT Hor White - [VAZADO].svg" alt="Bellaris Clinic" style="height:clamp(32px,4vw,52px); width:auto; opacity:0.92; margin-bottom:36px;">
+    <div class="hero-title">BELLARIS <span>SOCIETY</span></div>
+    <div class="hero-sub">O clube de acesso da Bellaris Clinic</div>
+    <div class="divider"></div>
+    <div class="hero-tagline">
+      <span>Acesso</span>
+      <div class="sep"></div>
+      <span>Prioridade</span>
+      <div class="sep"></div>
+      <span>Exclusividade</span>
+    </div>
+  </div>
+
+  <!-- ── S2: DESEJO ── -->
+  <div class="slide" id="s2">
+    <div class="content-block">
+      <div class="label">Ato 1 — O Desejo</div>
+      <div class="headline" style="text-align:center; margin-bottom:32px;">
+        Ela não quer esperar.<br>
+        <span style="color:var(--gold);">Ela quer ser a primeira.</span>
+      </div>
+      <div class="divider"></div>
+      <p class="body-lg" style="text-align:center; margin-top: 16px;">
+        A mulher que busca a Bellaris já sabe o que quer.<br>
+        Imagem que transmite presença. Cuidado premium. Resultado percebido.
+      </p>
+      <div style="margin-top: 36px;">
+        <div class="quote-box" style="max-width:700px; margin: 0 auto;">
+          <p class="quote-text">
+            "Ela não quer ser atendida como qualquer uma — ela quer ser conduzida com prioridade, critério e exclusividade."
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── S3: DOR ── -->
+  <div class="slide" id="s3">
+    <div style="width:100%; max-width:920px; text-align:center;">
+      <div class="label">Ato 2 — O Conflito</div>
+      <div class="headline" style="text-align:center; margin-bottom:40px;">
+        Mas hoje, ela ainda espera.
+      </div>
+
+      <div class="comparison-row" style="margin: 0 auto;">
+        <div class="comparison-col left">
+          <div class="comp-label">Cliente Comum</div>
+          <p class="comp-item">Espera a vaga abrir</p>
+          <p class="comp-item">Paga o preço padrão</p>
+          <p class="comp-item">Decide depois que sobrou</p>
+          <p class="comp-item">Sem prioridade. Sem acesso.</p>
+        </div>
+        <div class="comparison-divider"></div>
+        <div class="comparison-col right">
+          <div class="comp-label" style="color: var(--gold);">Cliente Society</div>
+          <p class="comp-item-gold">Entra 48h antes</p>
+          <p class="comp-item-gold">Paga melhor</p>
+          <p class="comp-item-gold">Decide primeiro</p>
+          <p class="comp-item-gold">Prioridade garantida.</p>
+        </div>
+      </div>
+
+      <p class="body" style="margin-top:32px; font-size:clamp(16px,1.8vw,20px); color:rgba(255,255,255,0.50);">
+        Ela merece mais. E você sabe disso.
+      </p>
+    </div>
+  </div>
+
+  <!-- ── S4: VIRADA ── -->
+  <div class="slide" id="s4">
+    <div class="content-block">
+      <div class="label">Ato 3 — A Virada</div>
+      <div class="display" style="margin-bottom:28px;">
+        Apresentamos o<br><span style="color:var(--gold);">Bellaris Society.</span>
+      </div>
+      <div class="divider"></div>
+      <div style="max-width:700px; margin: 28px auto 0;">
+        <div class="card-highlight">
+          <p class="body-lg" style="text-align:center; color:var(--white);">
+            O Bellaris Society é o <strong style="color:var(--gold-lt);">clube de acesso</strong> da Bellaris:<br>
+            prioridade, melhores condições e relacionamento contínuo com a clínica.
+          </p>
+        </div>
+        <p class="body" style="text-align:center; margin-top:24px; font-size:clamp(15px,1.7vw,20px);">
+          Não é um plano de desconto. Não é um pacote de serviços.<br>
+          É um sistema de <em style="color:var(--gold);">acesso antecipado, vantagem estratégica e retenção de longo prazo.</em>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── S5: COMUNIDADE & EVENTOS ── -->
+  <div class="slide" id="s5">
+    <div class="two-col" style="align-items:center; max-width:1000px;">
+      <div>
+        <div class="label">Ato 4 — A Solução</div>
+        <div class="headline-gold" style="margin-bottom:16px;">Um mundo exclusivo para ela.</div>
+        <div class="divider-left"></div>
+        <p class="body" style="margin-bottom:28px;">
+          Comunidade, eventos e conexões que elevam a imagem, o estilo de vida e o capital social da paciente.
+        </p>
+      </div>
+      <div>
+        <ul class="bullet-list">
+          <li>Eventos mensais — wellness, moda, estética, lifestyle</li>
+          <li>Palestras e mentorias bimestrais com profissionais de renome</li>
+          <li>Networking qualificado</li>
+          <li>Collabs com parceiros premium nacionais e globais</li>
+          <li>Convites exclusivos para lançamentos antecipados</li>
+          <li>Comunidade fechada de assinantes</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── S6: VANTAGENS CLÍNICAS ── -->
+  <div class="slide" id="s6">
+    <div class="two-col" style="align-items:center; max-width:1000px;">
+      <div>
+        <div class="label">Ato 4 — A Solução</div>
+        <div class="headline-gold" style="margin-bottom:16px;">Na clínica, ela vem em primeiro.</div>
+        <div class="divider-left"></div>
+        <p class="body" style="margin-bottom:28px;">
+          Acesso preferencial, condições exclusivas e cuidado que reflete o padrão de quem não aceita o comum.
+        </p>
+      </div>
+      <div>
+        <ul class="bullet-list">
+          <li>10% OFF nos procedimentos dos Experience Days</li>
+          <li>Agenda prioritária nos Experience Days</li>
+          <li>Consultas estéticas gratuitas ou com preços reduzidos</li>
+          <li>Desconto em planejamento com tecnologia 3D</li>
+          <li>Precificação diferenciada em planos e Experiences</li>
+          <li>Parcelamento em até 5x sem taxa</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── S7: EXPERIENCE DAYS ── -->
+  <div class="slide" id="s7">
+    <div style="width:100%; max-width:860px; text-align:center;">
+      <div class="label">Acesso VIP</div>
+      <div class="headline" style="text-align:center; margin-bottom:12px;">
+        Ela entra <span style="color:var(--gold);">48 horas</span> antes.
+      </div>
+      <div class="divider"></div>
+
+      <div style="margin: 28px auto; max-width:700px;">
+        <table class="premium-table" style="width:100%;">
+          <thead>
+            <tr>
+              <th>Fase</th>
+              <th>Acesso</th>
+              <th>Antecedência</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="highlight-row">
+              <td><strong>Pré-venda VIP</strong></td>
+              <td>Assinantes Society</td>
+              <td class="accent">48h antes</td>
+            </tr>
+            <tr>
+              <td>Lista de Espera</td>
+              <td>Leads qualificados</td>
+              <td>24h antes</td>
+            </tr>
+            <tr>
+              <td>Público Geral</td>
+              <td>Aberto</td>
+              <td>D-1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="quote-box" style="max-width:640px; margin: 0 auto;">
+        <p class="quote-text">
+          "Society transforma acesso em poder real de escolha. Ela escolhe primeiro — sempre."
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── S8: PAYBACK ── -->
+  <div class="slide" id="s8">
+    <div style="width:100%; max-width:860px; text-align:center;">
+      <div class="label">Ato 5 — O Valor</div>
+      <div class="headline" style="text-align:center; margin-bottom:12px;">
+        O retorno acontece <span style="color:var(--gold);">no primeiro mês.</span>
+      </div>
+      <div class="divider"></div>
+
+      <div style="margin: 24px auto; max-width:680px;">
+        <table class="premium-table" style="width:100%;">
+          <thead>
+            <tr>
+              <th>Cenário de Uso</th>
+              <th>Valor de Mercado</th>
+              <th>Retorno sobre R$ 99</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1 evento mensal</td>
+              <td>R$ 120</td>
+              <td class="accent">+ R$ 21</td>
+            </tr>
+            <tr>
+              <td>Evento + consulta estética</td>
+              <td>R$ 400</td>
+              <td class="accent">+ R$ 301</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="display:flex; gap:32px; justify-content:center; flex-wrap:wrap; margin-top: 24px;">
+        <div class="card" style="text-align:center; flex:1; min-width:200px; max-width:280px;">
+          <p class="body" style="margin-bottom:8px; font-size:12px; letter-spacing:3px; text-transform:uppercase;">Valor percebido mensal</p>
+          <p style="font-family:var(--serif); font-size:clamp(24px,3vw,36px); color:var(--gold-lt);">R$ 250 – R$ 500</p>
+        </div>
+        <div class="card" style="text-align:center; flex:1; min-width:200px; max-width:280px;">
+          <p class="body" style="margin-bottom:8px; font-size:12px; letter-spacing:3px; text-transform:uppercase;">Economia sobre o avulso</p>
+          <p style="font-family:var(--serif); font-size:clamp(24px,3vw,36px); color:var(--gold-lt);">65% – 70%</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── S9: POSICIONAMENTO ── -->
+  <div class="slide" id="s9">
+    <div class="content-block">
+      <div class="label">O que Society significa</div>
+      <div class="headline-gold" style="text-align:center; margin-bottom:36px;">
+        "Você não precisa esperar a agenda abrir."
+      </div>
+      <div class="divider"></div>
+      <div style="margin-top:32px; max-width:760px; margin-left:auto; margin-right:auto;">
+        <div class="phrase-item">"Enquanto algumas esperam... outras escolhem primeiro."</div>
+        <div class="phrase-item">"Acesso antecipado muda tudo."</div>
+        <div class="phrase-item">"Prioridade não se pede. Se garante."</div>
+        <div class="phrase-item">"A assinatura se paga no primeiro procedimento."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── S10: ECOSSISTEMA ── -->
+  <div class="slide" id="s10">
+    <div style="width:100%; max-width:820px; text-align:center;">
+      <div class="label">A Jornada da Paciente</div>
+      <div class="headline" style="text-align:center; margin-bottom:12px;">
+        Onde <span style="color:var(--gold);">Society</span> se encaixa.
+      </div>
+      <div class="divider"></div>
+
+      <div style="display:flex; flex-direction:column; gap:12px; align-items:center; margin-top:28px;">
+        <div class="funnel-step dim">
+          <span class="funnel-label">Entrada / Aquisição</span>
+          <span class="funnel-name muted">Experience Days</span>
+        </div>
+        <div style="color:var(--gold); font-size:22px; line-height:1;">↓</div>
+        <div class="funnel-step active-step">
+          <span class="funnel-label" style="color:var(--gold);">Relacionamento / Retenção</span>
+          <span class="funnel-name gold">✦ Bellaris Society</span>
+        </div>
+        <div style="color:var(--gold); font-size:22px; line-height:1;">↓</div>
+        <div class="funnel-step dim">
+          <span class="funnel-label">Evolução Contínua</span>
+          <span class="funnel-name muted">All Week</span>
+        </div>
+      </div>
+
+      <p class="body" style="margin-top:28px; font-size:clamp(14px,1.6vw,19px);">
+        Society é a <em style="color:rgba(255,255,255,0.70);">ponte estratégica</em> — converte quem experimentou em quem permanece e evolui.
+      </p>
+    </div>
+  </div>
+
+  <!-- ── S11: INVESTIMENTO ── -->
+  <div class="slide" id="s11">
+    <div class="content-block">
+      <div class="label">Ato 6 — A Oferta</div>
+      <div style="margin-bottom:12px;" class="body" style="text-align:center;">Bellaris Society</div>
+      <div class="price-display" style="text-align:center;">R$ 99</div>
+      <div class="price-sub" style="text-align:center;">/ mês — contrato anual · 12 parcelas</div>
+      <div style="text-align:center;">
+        <div class="price-badge">Condição especial · Primeiros 100 clientes</div>
+      </div>
+      <div class="divider" style="margin-top:36px;"></div>
+      <div style="display:flex; gap:28px; justify-content:center; flex-wrap:wrap; margin-top:28px;">
+        <div class="card" style="text-align:center; flex:1; min-width:180px; max-width:240px; padding:24px;">
+          <p class="body" style="font-size:11px; letter-spacing:3px; text-transform:uppercase; margin-bottom:10px;">Valor percebido</p>
+          <p style="font-family:var(--serif); font-size:clamp(22px,2.5vw,30px); color:var(--gold-lt);">R$ 250 – 500/mês</p>
+        </div>
+        <div class="card" style="text-align:center; flex:1; min-width:180px; max-width:240px; padding:24px;">
+          <p class="body" style="font-size:11px; letter-spacing:3px; text-transform:uppercase; margin-bottom:10px;">Economia real</p>
+          <p style="font-family:var(--serif); font-size:clamp(22px,2.5vw,30px); color:var(--gold-lt);">até 70%</p>
+        </div>
+        <div class="card" style="text-align:center; flex:1; min-width:180px; max-width:240px; padding:24px;">
+          <p class="body" style="font-size:11px; letter-spacing:3px; text-transform:uppercase; margin-bottom:10px;">Payback</p>
+          <p style="font-family:var(--serif); font-size:clamp(22px,2.5vw,30px); color:var(--gold-lt);">1º procedimento</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── S12: CTA ── -->
+  <div class="slide" id="s12" style="text-align:center;">
+    <div class="content-block">
+      <div class="label">As primeiras 100 vagas</div>
+      <div class="display" style="margin-bottom:24px; line-height:1.1;">
+        A condição especial<br>
+        é para quem <span style="color:var(--gold);">decide agora.</span>
+      </div>
+      <div class="divider"></div>
+      <p class="body-lg" style="text-align:center; margin-top:24px; max-width:640px; margin-left:auto; margin-right:auto;">
+        Apenas os primeiros 100 membros terão acesso à condição de lançamento.
+        Após isso, o Society segue seu preço regular.
+      </p>
+      <div style="margin-top:44px;">
+        <div class="card-highlight" style="display:inline-block; padding:28px 56px; text-align:center;">
+          <p style="font-family:var(--body); font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--gold); margin-bottom:12px;">Frase de fechamento</p>
+          <p style="font-family:var(--serif); font-size:clamp(20px,2.5vw,28px); font-style:italic; color:var(--white); line-height:1.4;">
+            "Prioridade não se pede.<br>Se garante."
+          </p>
+        </div>
+      </div>
+      <div style="margin-top:44px; display:flex; flex-direction:column; align-items:center; gap:16px;">
+        <img src="02.1. LT Hor White - [VAZADO].svg" alt="Bellaris Clinic" style="height:clamp(28px,3.5vw,44px); width:auto; opacity:0.90;">
+        <p class="body" style="letter-spacing:2px; font-size:12px; text-transform:uppercase; color:var(--muted);">Society · R$ 99/mês · Contrato anual</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end deck -->
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const dotsEl  = document.getElementById('dots');
+  let current   = 0;
+
+  // Build dots
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(d);
+  });
+
+  function updateDots() {
+    document.querySelectorAll('.dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+  }
+
+  function updateCounter() {
+    const n = String(current + 1).padStart(2, '0');
+    const t = String(slides.length).padStart(2, '0');
+    counter.textContent = n + ' / ' + t;
+  }
+
+  function goTo(next) {
+    if (next === current) return;
+    if (next < 0 || next >= slides.length) return;
+
+    const dir = next > current ? 1 : -1;
+
+    slides[current].classList.remove('active');
+    slides[current].classList.add(dir > 0 ? 'exit-left' : '');
+
+    setTimeout(() => {
+      slides[current].classList.remove('exit-left');
+      current = next;
+      slides[current].classList.add('active');
+      updateDots();
+      updateCounter();
+    }, 30);
+
+    // clean up the old one after transition
+    const old = current !== next ? (dir > 0 ? current : next) : null;
+    void old;
+  }
+
+  // Simpler approach: just switch
+  function navigate(dir) {
+    const next = current + dir;
+    if (next < 0 || next >= slides.length) return;
+
+    slides[current].style.opacity = '0';
+    slides[current].style.transform = dir > 0 ? 'translateX(-60px)' : 'translateX(60px)';
+    slides[current].style.pointerEvents = 'none';
+
+    current = next;
+
+    slides[current].style.opacity = '0';
+    slides[current].style.transform = dir > 0 ? 'translateX(60px)' : 'translateX(-60px)';
+    slides[current].style.transition = 'none';
+    slides[current].style.pointerEvents = 'all';
+
+    // Force reflow
+    void slides[current].offsetHeight;
+
+    slides[current].style.transition = 'opacity 0.55s ease, transform 0.55s ease';
+    slides[current].style.opacity = '1';
+    slides[current].style.transform = 'translateX(0)';
+
+    updateDots();
+    updateCounter();
+  }
+
+  // Dot click navigation
+  document.querySelectorAll('.dot').forEach((d, i) => {
+    d.onclick = () => {
+      const dir = i > current ? 1 : -1;
+      const steps = Math.abs(i - current);
+      // Jump directly
+      slides[current].style.opacity = '0';
+      slides[current].style.transform = dir > 0 ? 'translateX(-60px)' : 'translateX(60px)';
+      slides[current].style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+      slides[current].style.pointerEvents = 'none';
+
+      current = i;
+      slides[current].style.opacity = '0';
+      slides[current].style.transform = dir > 0 ? 'translateX(60px)' : 'translateX(-60px)';
+      slides[current].style.transition = 'none';
+      slides[current].style.pointerEvents = 'all';
+      void slides[current].offsetHeight;
+      slides[current].style.transition = 'opacity 0.55s ease, transform 0.55s ease';
+      slides[current].style.opacity = '1';
+      slides[current].style.transform = 'translateX(0)';
+
+      updateDots();
+      updateCounter();
+    };
+  });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') navigate(1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')  navigate(-1);
+  });
+
+  // Touch swipe
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+  document.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].screenX;
+    if (Math.abs(diff) > 40) navigate(diff > 0 ? 1 : -1);
+  });
+</script>
+</body>
+</html>
