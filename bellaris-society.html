@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Bellaris Society</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
@@ -22,7 +22,13 @@
       --body:     'Cormorant Garamond', Georgia, serif;
     }
 
-    html, body { width: 100%; height: 100%; overflow: hidden; background: var(--black); }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--black);
+      -webkit-tap-highlight-color: transparent;
+    }
 
     /* ───── DECK ───── */
     .deck {
@@ -39,12 +45,14 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 60px 80px;
+      padding: 80px 80px 60px;
       background: var(--black);
       opacity: 0;
       transform: translateX(60px);
       transition: opacity 0.6s ease, transform 0.6s ease;
       pointer-events: none;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
     .slide.active {
       opacity: 1;
@@ -59,11 +67,11 @@
     /* ───── NAVIGATION ───── */
     .nav-dots {
       position: fixed;
-      bottom: 32px;
+      bottom: 24px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      gap: 10px;
+      gap: 8px;
       z-index: 100;
     }
     .dot {
@@ -97,7 +105,7 @@
     .slide-counter {
       position: fixed;
       top: 28px;
-      right: 40px;
+      right: 20px;
       font-family: var(--body);
       font-size: 13px;
       color: var(--muted);
@@ -108,12 +116,12 @@
     /* ───── BRAND MARK ───── */
     .brand-mark {
       position: fixed;
-      top: 24px;
-      left: 40px;
+      top: 20px;
+      left: 20px;
       z-index: 100;
     }
     .brand-mark img {
-      height: 28px;
+      height: 24px;
       width: auto;
       opacity: 0.55;
     }
@@ -125,12 +133,12 @@
       letter-spacing: 4px;
       text-transform: uppercase;
       color: var(--gold);
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .display {
       font-family: var(--serif);
-      font-size: clamp(52px, 8vw, 96px);
+      font-size: clamp(38px, 7vw, 96px);
       font-weight: 500;
       line-height: 1.05;
       color: var(--white);
@@ -139,7 +147,7 @@
 
     .display-gold {
       font-family: var(--serif);
-      font-size: clamp(52px, 8vw, 96px);
+      font-size: clamp(38px, 7vw, 96px);
       font-weight: 500;
       line-height: 1.05;
       color: var(--gold);
@@ -148,7 +156,7 @@
 
     .headline {
       font-family: var(--serif);
-      font-size: clamp(32px, 4.5vw, 56px);
+      font-size: clamp(26px, 4vw, 56px);
       font-weight: 500;
       line-height: 1.15;
       color: var(--white);
@@ -156,7 +164,7 @@
 
     .headline-gold {
       font-family: var(--serif);
-      font-size: clamp(28px, 3.5vw, 44px);
+      font-size: clamp(22px, 3vw, 44px);
       font-weight: 500;
       line-height: 1.2;
       color: var(--gold);
@@ -164,7 +172,7 @@
 
     .body-lg {
       font-family: var(--body);
-      font-size: clamp(18px, 2vw, 24px);
+      font-size: clamp(17px, 1.8vw, 24px);
       font-weight: 300;
       line-height: 1.7;
       color: rgba(255,255,255,0.80);
@@ -172,7 +180,7 @@
 
     .body {
       font-family: var(--body);
-      font-size: clamp(15px, 1.6vw, 20px);
+      font-size: clamp(14px, 1.5vw, 20px);
       font-weight: 300;
       line-height: 1.7;
       color: var(--muted);
@@ -182,31 +190,31 @@
       width: 48px;
       height: 1px;
       background: var(--gold);
-      margin: 24px auto;
+      margin: 20px auto;
     }
 
-    .divider-left { margin: 20px 0; }
+    .divider-left { margin: 16px 0; }
 
     /* ───── CARDS ───── */
     .card {
       background: var(--card);
       border: 1px solid rgba(196,163,90,0.2);
       border-radius: 4px;
-      padding: 32px 36px;
+      padding: 28px 32px;
     }
 
     .card-highlight {
       background: var(--gold-dim);
       border: 1px solid rgba(196,163,90,0.4);
       border-radius: 4px;
-      padding: 28px 36px;
+      padding: 24px 28px;
     }
 
     /* ───── GRID / LAYOUT ───── */
     .two-col {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 40px;
+      gap: 32px;
       width: 100%;
       max-width: 1100px;
     }
@@ -214,7 +222,7 @@
     .three-col {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 24px;
+      gap: 20px;
       width: 100%;
       max-width: 1100px;
     }
@@ -236,44 +244,50 @@
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
     }
     .bullet-list li {
       font-family: var(--body);
-      font-size: clamp(16px, 1.7vw, 21px);
+      font-size: clamp(15px, 1.6vw, 20px);
       font-weight: 300;
       color: rgba(255,255,255,0.80);
       display: flex;
       align-items: flex-start;
-      gap: 14px;
+      gap: 12px;
       line-height: 1.5;
     }
     .bullet-list li::before {
       content: '✦';
       color: var(--gold);
       font-size: 10px;
-      margin-top: 6px;
+      margin-top: 5px;
       flex-shrink: 0;
     }
 
     /* ───── QUOTE ───── */
     .quote-box {
       border-left: 2px solid var(--gold);
-      padding: 20px 28px;
+      padding: 18px 24px;
       background: var(--gold-dim);
       border-radius: 0 4px 4px 0;
     }
     .quote-text {
       font-family: var(--serif);
-      font-size: clamp(18px, 2.2vw, 26px);
+      font-size: clamp(16px, 2vw, 24px);
       font-style: italic;
       color: var(--white);
       line-height: 1.5;
     }
 
     /* ───── TABLE ───── */
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
     .premium-table {
       width: 100%;
+      min-width: 400px;
       border-collapse: collapse;
       font-family: var(--body);
     }
@@ -283,13 +297,14 @@
       font-size: 11px;
       letter-spacing: 3px;
       text-transform: uppercase;
-      padding: 14px 20px;
+      padding: 12px 16px;
       text-align: left;
       border-bottom: 1px solid rgba(196,163,90,0.3);
+      white-space: nowrap;
     }
     .premium-table td {
-      padding: 14px 20px;
-      font-size: clamp(14px, 1.5vw, 18px);
+      padding: 12px 16px;
+      font-size: clamp(13px, 1.4vw, 17px);
       color: rgba(255,255,255,0.80);
       border-bottom: 1px solid rgba(255,255,255,0.06);
       font-weight: 300;
@@ -311,7 +326,7 @@
       max-width: 920px;
     }
     .comparison-col {
-      padding: 28px 32px;
+      padding: 24px 28px;
     }
     .comparison-col.left {
       background: var(--card);
@@ -337,22 +352,22 @@
       letter-spacing: 4px;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     .comp-item {
       font-family: var(--body);
-      font-size: clamp(15px, 1.6vw, 19px);
+      font-size: clamp(14px, 1.5vw, 18px);
       font-weight: 300;
       color: rgba(255,255,255,0.60);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       line-height: 1.4;
     }
     .comp-item-gold {
       font-family: var(--body);
-      font-size: clamp(15px, 1.6vw, 19px);
+      font-size: clamp(14px, 1.5vw, 18px);
       font-weight: 400;
       color: var(--gold-lt);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       line-height: 1.4;
     }
 
@@ -360,11 +375,11 @@
     .funnel-step {
       display: flex;
       align-items: center;
-      gap: 20px;
-      padding: 20px 28px;
+      gap: 16px;
+      padding: 16px 24px;
       border-radius: 4px;
       width: 100%;
-      max-width: 680px;
+      max-width: 640px;
     }
     .funnel-step.dim { background: var(--card); border: 1px solid rgba(255,255,255,0.07); }
     .funnel-step.active-step { background: var(--gold-dim); border: 1px solid rgba(196,163,90,0.4); }
@@ -374,12 +389,12 @@
       letter-spacing: 3px;
       text-transform: uppercase;
       color: var(--muted);
-      width: 220px;
+      min-width: 140px;
       flex-shrink: 0;
     }
     .funnel-name {
       font-family: var(--serif);
-      font-size: clamp(18px, 2vw, 24px);
+      font-size: clamp(16px, 1.8vw, 22px);
     }
     .funnel-name.gold { color: var(--gold); font-weight: 600; }
     .funnel-name.muted { color: rgba(255,255,255,0.45); }
@@ -387,16 +402,16 @@
     /* ───── PRICE BLOCK ───── */
     .price-display {
       font-family: var(--serif);
-      font-size: clamp(64px, 10vw, 120px);
+      font-size: clamp(56px, 10vw, 120px);
       font-weight: 500;
       color: var(--gold);
       line-height: 1;
     }
     .price-sub {
       font-family: var(--body);
-      font-size: clamp(16px, 1.8vw, 22px);
+      font-size: clamp(15px, 1.6vw, 22px);
       color: var(--muted);
-      margin-top: 10px;
+      margin-top: 8px;
       letter-spacing: 1px;
     }
     .price-badge {
@@ -406,21 +421,21 @@
       border-radius: 2px;
       padding: 8px 20px;
       font-family: var(--body);
-      font-size: 13px;
+      font-size: 12px;
       letter-spacing: 2px;
       color: var(--gold);
       text-transform: uppercase;
-      margin-top: 24px;
+      margin-top: 20px;
     }
 
     /* ───── PHRASE LIST ───── */
     .phrase-item {
       font-family: var(--serif);
-      font-size: clamp(20px, 2.5vw, 30px);
+      font-size: clamp(17px, 2.2vw, 28px);
       font-style: italic;
       color: rgba(255,255,255,0.80);
       border-bottom: 1px solid rgba(255,255,255,0.07);
-      padding: 18px 0;
+      padding: 16px 0;
       text-align: center;
     }
     .phrase-item:last-child { border-bottom: none; }
@@ -429,19 +444,11 @@
 
     /* S1 — HERO */
     #s1 { text-align: center; }
-    #s1 .hero-label {
-      font-family: var(--body);
-      font-size: 11px;
-      letter-spacing: 6px;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 28px;
-    }
     #s1 .hero-title {
       font-family: var(--serif);
-      font-size: clamp(60px, 11vw, 130px);
+      font-size: clamp(44px, 10vw, 130px);
       font-weight: 500;
-      letter-spacing: 10px;
+      letter-spacing: clamp(4px, 1.5vw, 10px);
       text-transform: uppercase;
       color: var(--white);
       line-height: 1;
@@ -449,21 +456,22 @@
     #s1 .hero-title span { color: var(--gold); }
     #s1 .hero-sub {
       font-family: var(--body);
-      font-size: clamp(16px, 1.8vw, 22px);
+      font-size: clamp(14px, 1.6vw, 22px);
       color: var(--muted);
-      margin-top: 24px;
+      margin-top: 20px;
       letter-spacing: 3px;
     }
     #s1 .hero-tagline {
-      margin-top: 48px;
+      margin-top: 36px;
       display: flex;
-      gap: 40px;
+      gap: 24px;
       align-items: center;
       justify-content: center;
+      flex-wrap: wrap;
     }
     #s1 .hero-tagline span {
       font-family: var(--body);
-      font-size: clamp(13px, 1.4vw, 16px);
+      font-size: clamp(11px, 1.2vw, 15px);
       letter-spacing: 4px;
       text-transform: uppercase;
       color: rgba(255,255,255,0.45);
@@ -491,6 +499,147 @@
       pointer-events: none;
     }
 
+    /* S12 — CTA logo destaque */
+    .cta-logo-wrap {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .cta-logo-wrap img {
+      height: clamp(48px, 8vw, 80px);
+      width: auto;
+      opacity: 1;
+      filter: brightness(1.1);
+    }
+    .cta-logo-line {
+      width: 120px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 4px 0;
+    }
+    .cta-logo-name {
+      font-family: var(--body);
+      font-size: 11px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    /* ───── RESPONSIVE — MOBILE ───── */
+    @media (max-width: 768px) {
+
+      html, body { overflow: hidden; }
+
+      .slide {
+        padding: 70px 24px 80px;
+        justify-content: flex-start;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      /* Nav arrows hidden on mobile — use swipe */
+      .nav-arrow { display: none; }
+
+      .nav-dots {
+        bottom: 16px;
+        gap: 6px;
+      }
+      .dot { width: 5px; height: 5px; }
+
+      .slide-counter {
+        top: 14px;
+        right: 14px;
+        font-size: 11px;
+      }
+
+      .brand-mark {
+        top: 12px;
+        left: 14px;
+      }
+      .brand-mark img { height: 18px; }
+
+      /* Grids colapsar */
+      .two-col {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .three-col {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      /* Comparison */
+      .comparison-row {
+        grid-template-columns: 1fr;
+        max-width: 100%;
+        gap: 0;
+      }
+      .comparison-divider { display: none; }
+      .comparison-col.left {
+        border-radius: 4px 4px 0 0;
+        border-right: 1px solid rgba(255,255,255,0.08);
+        border-bottom: none;
+        padding: 20px 20px;
+      }
+      .comparison-col.right {
+        border-radius: 0 0 4px 4px;
+        border-left: 1px solid rgba(196,163,90,0.35);
+        border-top: 1px solid rgba(196,163,90,0.35);
+        padding: 20px 20px;
+      }
+
+      /* Funnel */
+      .funnel-step {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        padding: 14px 18px;
+        max-width: 100%;
+      }
+      .funnel-label {
+        min-width: unset;
+        width: 100%;
+      }
+
+      /* Cards flex */
+      .cards-row {
+        flex-direction: column !important;
+        gap: 16px !important;
+      }
+      .cards-row .card {
+        max-width: 100% !important;
+        min-width: unset !important;
+      }
+
+      /* Hero S1 */
+      #s1 { justify-content: center; }
+      #s1 .hero-tagline { gap: 14px; }
+      #s1 .hero-tagline .sep { display: none; }
+
+      /* Content blocks */
+      .content-block { max-width: 100%; }
+      .quote-box { max-width: 100% !important; }
+
+      /* CTA logo */
+      .cta-logo-wrap img {
+        height: clamp(44px, 15vw, 72px);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .slide { padding: 64px 18px 72px; }
+
+      .label { font-size: 10px; letter-spacing: 3px; margin-bottom: 12px; }
+
+      .card { padding: 20px 18px; }
+      .card-highlight { padding: 18px 18px; }
+
+      .phrase-item { padding: 12px 0; }
+
+      .price-badge { padding: 7px 14px; font-size: 10px; }
+    }
   </style>
 </head>
 <body>
@@ -513,7 +662,7 @@
 
   <!-- ── S1: HERO ── -->
   <div class="slide active" id="s1">
-    <img src="02.1. LT Hor White - [VAZADO].svg" alt="Bellaris Clinic" style="height:clamp(32px,4vw,52px); width:auto; opacity:0.92; margin-bottom:36px;">
+    <img src="02.1. LT Hor White - [VAZADO].svg" alt="Bellaris Clinic" style="height:clamp(28px,4vw,52px); width:auto; opacity:0.92; margin-bottom:28px;">
     <div class="hero-title">BELLARIS <span>SOCIETY</span></div>
     <div class="hero-sub">O clube de acesso da Bellaris Clinic</div>
     <div class="divider"></div>
@@ -530,7 +679,7 @@
   <div class="slide" id="s2">
     <div class="content-block">
       <div class="label">Ato 1 — O Desejo</div>
-      <div class="headline" style="text-align:center; margin-bottom:32px;">
+      <div class="headline" style="text-align:center; margin-bottom:28px;">
         Ela não quer esperar.<br>
         <span style="color:var(--gold);">Ela quer ser a primeira.</span>
       </div>
@@ -539,7 +688,7 @@
         A mulher que busca a Bellaris já sabe o que quer.<br>
         Imagem que transmite presença. Cuidado premium. Resultado percebido.
       </p>
-      <div style="margin-top: 36px;">
+      <div style="margin-top: 28px;">
         <div class="quote-box" style="max-width:700px; margin: 0 auto;">
           <p class="quote-text">
             "Ela não quer ser atendida como qualquer uma — ela quer ser conduzida com prioridade, critério e exclusividade."
@@ -553,7 +702,7 @@
   <div class="slide" id="s3">
     <div style="width:100%; max-width:920px; text-align:center;">
       <div class="label">Ato 2 — O Conflito</div>
-      <div class="headline" style="text-align:center; margin-bottom:40px;">
+      <div class="headline" style="text-align:center; margin-bottom:32px;">
         Mas hoje, ela ainda espera.
       </div>
 
@@ -575,7 +724,7 @@
         </div>
       </div>
 
-      <p class="body" style="margin-top:32px; font-size:clamp(16px,1.8vw,20px); color:rgba(255,255,255,0.50);">
+      <p class="body" style="margin-top:24px; font-size:clamp(15px,1.7vw,19px); color:rgba(255,255,255,0.50);">
         Ela merece mais. E você sabe disso.
       </p>
     </div>
@@ -585,18 +734,18 @@
   <div class="slide" id="s4">
     <div class="content-block">
       <div class="label">Ato 3 — A Virada</div>
-      <div class="display" style="margin-bottom:28px;">
+      <div class="display" style="margin-bottom:24px;">
         Apresentamos o<br><span style="color:var(--gold);">Bellaris Society.</span>
       </div>
       <div class="divider"></div>
-      <div style="max-width:700px; margin: 28px auto 0;">
+      <div style="max-width:700px; margin: 24px auto 0;">
         <div class="card-highlight">
           <p class="body-lg" style="text-align:center; color:var(--white);">
             O Bellaris Society é o <strong style="color:var(--gold-lt);">clube de acesso</strong> da Bellaris:<br>
             prioridade, melhores condições e relacionamento contínuo com a clínica.
           </p>
         </div>
-        <p class="body" style="text-align:center; margin-top:24px; font-size:clamp(15px,1.7vw,20px);">
+        <p class="body" style="text-align:center; margin-top:20px; font-size:clamp(14px,1.6vw,19px);">
           Não é um plano de desconto. Não é um pacote de serviços.<br>
           É um sistema de <em style="color:var(--gold);">acesso antecipado, vantagem estratégica e retenção de longo prazo.</em>
         </p>
@@ -609,9 +758,9 @@
     <div class="two-col" style="align-items:center; max-width:1000px;">
       <div>
         <div class="label">Ato 4 — A Solução</div>
-        <div class="headline-gold" style="margin-bottom:16px;">Um mundo exclusivo para ela.</div>
+        <div class="headline-gold" style="margin-bottom:14px;">Um mundo exclusivo para ela.</div>
         <div class="divider-left"></div>
-        <p class="body" style="margin-bottom:28px;">
+        <p class="body" style="margin-bottom:24px;">
           Comunidade, eventos e conexões que elevam a imagem, o estilo de vida e o capital social da paciente.
         </p>
       </div>
@@ -633,9 +782,9 @@
     <div class="two-col" style="align-items:center; max-width:1000px;">
       <div>
         <div class="label">Ato 4 — A Solução</div>
-        <div class="headline-gold" style="margin-bottom:16px;">Na clínica, ela vem em primeiro.</div>
+        <div class="headline-gold" style="margin-bottom:14px;">Na clínica, ela vem em primeiro.</div>
         <div class="divider-left"></div>
-        <p class="body" style="margin-bottom:28px;">
+        <p class="body" style="margin-bottom:24px;">
           Acesso preferencial, condições exclusivas e cuidado que reflete o padrão de quem não aceita o comum.
         </p>
       </div>
@@ -661,7 +810,7 @@
       </div>
       <div class="divider"></div>
 
-      <div style="margin: 28px auto; max-width:700px;">
+      <div class="table-wrapper" style="margin: 24px auto; max-width:700px;">
         <table class="premium-table" style="width:100%;">
           <thead>
             <tr>
@@ -707,7 +856,7 @@
       </div>
       <div class="divider"></div>
 
-      <div style="margin: 24px auto; max-width:680px;">
+      <div class="table-wrapper" style="margin: 20px auto; max-width:680px;">
         <table class="premium-table" style="width:100%;">
           <thead>
             <tr>
@@ -731,14 +880,14 @@
         </table>
       </div>
 
-      <div style="display:flex; gap:32px; justify-content:center; flex-wrap:wrap; margin-top: 24px;">
-        <div class="card" style="text-align:center; flex:1; min-width:200px; max-width:280px;">
-          <p class="body" style="margin-bottom:8px; font-size:12px; letter-spacing:3px; text-transform:uppercase;">Valor percebido mensal</p>
-          <p style="font-family:var(--serif); font-size:clamp(24px,3vw,36px); color:var(--gold-lt);">R$ 250 – R$ 500</p>
+      <div class="cards-row" style="display:flex; gap:24px; justify-content:center; flex-wrap:wrap; margin-top: 20px;">
+        <div class="card" style="text-align:center; flex:1; min-width:180px; max-width:260px;">
+          <p class="body" style="margin-bottom:6px; font-size:11px; letter-spacing:3px; text-transform:uppercase;">Valor percebido mensal</p>
+          <p style="font-family:var(--serif); font-size:clamp(22px,2.8vw,34px); color:var(--gold-lt);">R$ 250 – R$ 500</p>
         </div>
-        <div class="card" style="text-align:center; flex:1; min-width:200px; max-width:280px;">
-          <p class="body" style="margin-bottom:8px; font-size:12px; letter-spacing:3px; text-transform:uppercase;">Economia sobre o avulso</p>
-          <p style="font-family:var(--serif); font-size:clamp(24px,3vw,36px); color:var(--gold-lt);">65% – 70%</p>
+        <div class="card" style="text-align:center; flex:1; min-width:180px; max-width:260px;">
+          <p class="body" style="margin-bottom:6px; font-size:11px; letter-spacing:3px; text-transform:uppercase;">Economia sobre o avulso</p>
+          <p style="font-family:var(--serif); font-size:clamp(22px,2.8vw,34px); color:var(--gold-lt);">65% – 70%</p>
         </div>
       </div>
     </div>
@@ -748,11 +897,11 @@
   <div class="slide" id="s9">
     <div class="content-block">
       <div class="label">O que Society significa</div>
-      <div class="headline-gold" style="text-align:center; margin-bottom:36px;">
+      <div class="headline-gold" style="text-align:center; margin-bottom:28px;">
         "Você não precisa esperar a agenda abrir."
       </div>
       <div class="divider"></div>
-      <div style="margin-top:32px; max-width:760px; margin-left:auto; margin-right:auto;">
+      <div style="margin-top:24px; max-width:760px; margin-left:auto; margin-right:auto;">
         <div class="phrase-item">"Enquanto algumas esperam... outras escolhem primeiro."</div>
         <div class="phrase-item">"Acesso antecipado muda tudo."</div>
         <div class="phrase-item">"Prioridade não se pede. Se garante."</div>
@@ -770,24 +919,24 @@
       </div>
       <div class="divider"></div>
 
-      <div style="display:flex; flex-direction:column; gap:12px; align-items:center; margin-top:28px;">
+      <div style="display:flex; flex-direction:column; gap:10px; align-items:center; margin-top:24px;">
         <div class="funnel-step dim">
           <span class="funnel-label">Entrada / Aquisição</span>
           <span class="funnel-name muted">Experience Days</span>
         </div>
-        <div style="color:var(--gold); font-size:22px; line-height:1;">↓</div>
+        <div style="color:var(--gold); font-size:20px; line-height:1;">↓</div>
         <div class="funnel-step active-step">
           <span class="funnel-label" style="color:var(--gold);">Relacionamento / Retenção</span>
           <span class="funnel-name gold">✦ Bellaris Society</span>
         </div>
-        <div style="color:var(--gold); font-size:22px; line-height:1;">↓</div>
+        <div style="color:var(--gold); font-size:20px; line-height:1;">↓</div>
         <div class="funnel-step dim">
           <span class="funnel-label">Evolução Contínua</span>
           <span class="funnel-name muted">All Week</span>
         </div>
       </div>
 
-      <p class="body" style="margin-top:28px; font-size:clamp(14px,1.6vw,19px);">
+      <p class="body" style="margin-top:24px; font-size:clamp(14px,1.5vw,18px);">
         Society é a <em style="color:rgba(255,255,255,0.70);">ponte estratégica</em> — converte quem experimentou em quem permanece e evolui.
       </p>
     </div>
@@ -797,25 +946,25 @@
   <div class="slide" id="s11">
     <div class="content-block">
       <div class="label">Ato 6 — A Oferta</div>
-      <div style="margin-bottom:12px;" class="body" style="text-align:center;">Bellaris Society</div>
+      <div style="margin-bottom:8px;" class="body" style="text-align:center;">Bellaris Society</div>
       <div class="price-display" style="text-align:center;">R$ 99</div>
       <div class="price-sub" style="text-align:center;">/ mês — contrato anual · 12 parcelas</div>
       <div style="text-align:center;">
         <div class="price-badge">Condição especial · Primeiros 100 clientes</div>
       </div>
-      <div class="divider" style="margin-top:36px;"></div>
-      <div style="display:flex; gap:28px; justify-content:center; flex-wrap:wrap; margin-top:28px;">
-        <div class="card" style="text-align:center; flex:1; min-width:180px; max-width:240px; padding:24px;">
-          <p class="body" style="font-size:11px; letter-spacing:3px; text-transform:uppercase; margin-bottom:10px;">Valor percebido</p>
-          <p style="font-family:var(--serif); font-size:clamp(22px,2.5vw,30px); color:var(--gold-lt);">R$ 250 – 500/mês</p>
+      <div class="divider" style="margin-top:28px;"></div>
+      <div class="cards-row" style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin-top:24px;">
+        <div class="card" style="text-align:center; flex:1; min-width:160px; max-width:220px; padding:20px;">
+          <p class="body" style="font-size:10px; letter-spacing:3px; text-transform:uppercase; margin-bottom:8px;">Valor percebido</p>
+          <p style="font-family:var(--serif); font-size:clamp(18px,2.2vw,28px); color:var(--gold-lt);">R$ 250 – 500/mês</p>
         </div>
-        <div class="card" style="text-align:center; flex:1; min-width:180px; max-width:240px; padding:24px;">
-          <p class="body" style="font-size:11px; letter-spacing:3px; text-transform:uppercase; margin-bottom:10px;">Economia real</p>
-          <p style="font-family:var(--serif); font-size:clamp(22px,2.5vw,30px); color:var(--gold-lt);">até 70%</p>
+        <div class="card" style="text-align:center; flex:1; min-width:160px; max-width:220px; padding:20px;">
+          <p class="body" style="font-size:10px; letter-spacing:3px; text-transform:uppercase; margin-bottom:8px;">Economia real</p>
+          <p style="font-family:var(--serif); font-size:clamp(18px,2.2vw,28px); color:var(--gold-lt);">até 70%</p>
         </div>
-        <div class="card" style="text-align:center; flex:1; min-width:180px; max-width:240px; padding:24px;">
-          <p class="body" style="font-size:11px; letter-spacing:3px; text-transform:uppercase; margin-bottom:10px;">Payback</p>
-          <p style="font-family:var(--serif); font-size:clamp(22px,2.5vw,30px); color:var(--gold-lt);">1º procedimento</p>
+        <div class="card" style="text-align:center; flex:1; min-width:160px; max-width:220px; padding:20px;">
+          <p class="body" style="font-size:10px; letter-spacing:3px; text-transform:uppercase; margin-bottom:8px;">Payback</p>
+          <p style="font-family:var(--serif); font-size:clamp(18px,2.2vw,28px); color:var(--gold-lt);">1º procedimento</p>
         </div>
       </div>
     </div>
@@ -825,26 +974,31 @@
   <div class="slide" id="s12" style="text-align:center;">
     <div class="content-block">
       <div class="label">As primeiras 100 vagas</div>
-      <div class="display" style="margin-bottom:24px; line-height:1.1;">
+      <div class="display" style="margin-bottom:20px; line-height:1.1;">
         A condição especial<br>
         é para quem <span style="color:var(--gold);">decide agora.</span>
       </div>
       <div class="divider"></div>
-      <p class="body-lg" style="text-align:center; margin-top:24px; max-width:640px; margin-left:auto; margin-right:auto;">
+      <p class="body-lg" style="text-align:center; margin-top:20px; max-width:600px; margin-left:auto; margin-right:auto;">
         Apenas os primeiros 100 membros terão acesso à condição de lançamento.
         Após isso, o Society segue seu preço regular.
       </p>
-      <div style="margin-top:44px;">
-        <div class="card-highlight" style="display:inline-block; padding:28px 56px; text-align:center;">
-          <p style="font-family:var(--body); font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--gold); margin-bottom:12px;">Frase de fechamento</p>
-          <p style="font-family:var(--serif); font-size:clamp(20px,2.5vw,28px); font-style:italic; color:var(--white); line-height:1.4;">
+      <div style="margin-top:32px;">
+        <div class="card-highlight" style="display:inline-block; padding:24px 48px; text-align:center;">
+          <p style="font-family:var(--body); font-size:10px; letter-spacing:4px; text-transform:uppercase; color:var(--gold); margin-bottom:10px;">Frase de fechamento</p>
+          <p style="font-family:var(--serif); font-size:clamp(18px,2.2vw,26px); font-style:italic; color:var(--white); line-height:1.4;">
             "Prioridade não se pede.<br>Se garante."
           </p>
         </div>
       </div>
-      <div style="margin-top:44px; display:flex; flex-direction:column; align-items:center; gap:16px;">
-        <img src="02.1. LT Hor White - [VAZADO].svg" alt="Bellaris Clinic" style="height:clamp(28px,3.5vw,44px); width:auto; opacity:0.90;">
-        <p class="body" style="letter-spacing:2px; font-size:12px; text-transform:uppercase; color:var(--muted);">Society · R$ 99/mês · Contrato anual</p>
+
+      <!-- Logo em destaque -->
+      <div class="cta-logo-wrap">
+        <div class="cta-logo-line"></div>
+        <img src="02.1. LT Hor White - [VAZADO].svg" alt="Bellaris Clinic">
+        <div class="cta-logo-line"></div>
+        <div class="cta-logo-name">Bellaris Clinic</div>
+        <p class="body" style="letter-spacing:2px; font-size:11px; text-transform:uppercase; color:var(--muted); margin-top:4px;">Society · R$ 99/mês · Contrato anual</p>
       </div>
     </div>
   </div>
@@ -861,7 +1015,7 @@
   slides.forEach((_, i) => {
     const d = document.createElement('div');
     d.className = 'dot' + (i === 0 ? ' active' : '');
-    d.addEventListener('click', () => goTo(i));
+    d.addEventListener('click', () => jumpTo(i));
     dotsEl.appendChild(d);
   });
 
@@ -877,94 +1031,69 @@
     counter.textContent = n + ' / ' + t;
   }
 
-  function goTo(next) {
-    if (next === current) return;
-    if (next < 0 || next >= slides.length) return;
-
-    const dir = next > current ? 1 : -1;
-
-    slides[current].classList.remove('active');
-    slides[current].classList.add(dir > 0 ? 'exit-left' : '');
-
-    setTimeout(() => {
-      slides[current].classList.remove('exit-left');
-      current = next;
-      slides[current].classList.add('active');
-      updateDots();
-      updateCounter();
-    }, 30);
-
-    // clean up the old one after transition
-    const old = current !== next ? (dir > 0 ? current : next) : null;
-    void old;
-  }
-
-  // Simpler approach: just switch
   function navigate(dir) {
     const next = current + dir;
     if (next < 0 || next >= slides.length) return;
+    jumpTo(next, dir);
+  }
 
+  function jumpTo(next, dir) {
+    if (next === current) return;
+    if (dir === undefined) dir = next > current ? 1 : -1;
+
+    // Reset scroll position of next slide
+    slides[next].scrollTop = 0;
+
+    slides[current].style.transition = 'opacity 0.45s ease, transform 0.45s ease';
     slides[current].style.opacity = '0';
-    slides[current].style.transform = dir > 0 ? 'translateX(-60px)' : 'translateX(60px)';
+    slides[current].style.transform = dir > 0 ? 'translateX(-50px)' : 'translateX(50px)';
     slides[current].style.pointerEvents = 'none';
 
+    const prev = current;
     current = next;
 
-    slides[current].style.opacity = '0';
-    slides[current].style.transform = dir > 0 ? 'translateX(60px)' : 'translateX(-60px)';
     slides[current].style.transition = 'none';
+    slides[current].style.opacity = '0';
+    slides[current].style.transform = dir > 0 ? 'translateX(50px)' : 'translateX(-50px)';
     slides[current].style.pointerEvents = 'all';
 
-    // Force reflow
     void slides[current].offsetHeight;
 
-    slides[current].style.transition = 'opacity 0.55s ease, transform 0.55s ease';
+    slides[current].style.transition = 'opacity 0.5s ease, transform 0.5s ease';
     slides[current].style.opacity = '1';
     slides[current].style.transform = 'translateX(0)';
+
+    setTimeout(() => {
+      slides[prev].style.opacity = '';
+      slides[prev].style.transform = '';
+      slides[prev].style.transition = '';
+    }, 600);
 
     updateDots();
     updateCounter();
   }
 
-  // Dot click navigation
-  document.querySelectorAll('.dot').forEach((d, i) => {
-    d.onclick = () => {
-      const dir = i > current ? 1 : -1;
-      const steps = Math.abs(i - current);
-      // Jump directly
-      slides[current].style.opacity = '0';
-      slides[current].style.transform = dir > 0 ? 'translateX(-60px)' : 'translateX(60px)';
-      slides[current].style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-      slides[current].style.pointerEvents = 'none';
-
-      current = i;
-      slides[current].style.opacity = '0';
-      slides[current].style.transform = dir > 0 ? 'translateX(60px)' : 'translateX(-60px)';
-      slides[current].style.transition = 'none';
-      slides[current].style.pointerEvents = 'all';
-      void slides[current].offsetHeight;
-      slides[current].style.transition = 'opacity 0.55s ease, transform 0.55s ease';
-      slides[current].style.opacity = '1';
-      slides[current].style.transform = 'translateX(0)';
-
-      updateDots();
-      updateCounter();
-    };
-  });
-
   // Keyboard navigation
   document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') navigate(1);
-    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')  navigate(-1);
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); navigate(1); }
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp') { e.preventDefault(); navigate(-1); }
   });
 
   // Touch swipe
-  let touchStartX = 0;
-  document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+  let touchStartX = 0, touchStartY = 0;
+  document.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
   document.addEventListener('touchend', e => {
-    const diff = touchStartX - e.changedTouches[0].screenX;
-    if (Math.abs(diff) > 40) navigate(diff > 0 ? 1 : -1);
-  });
+    const dx = touchStartX - e.changedTouches[0].screenX;
+    const dy = touchStartY - e.changedTouches[0].screenY;
+    // Only navigate if horizontal swipe is dominant
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 44) {
+      navigate(dx > 0 ? 1 : -1);
+    }
+  }, { passive: true });
 </script>
 </body>
 </html>
